@@ -46,7 +46,7 @@ form.addEventListener("submit", function (e) {
     limpiarError("email-error");
   }
 
-  // Corrección 4 y 5: Solo enviar si no hay errores
+  // Corrección 4: Solo enviar si no hay errores
   if (!hayErrores) {
     enviarDatos(nombre, email, edad);
     mostrarExito();
@@ -73,7 +73,7 @@ function isValidEmail(email) {
   return re.test(email);
 }
 
-// Corrección 4: Pasar parámetros necesarios
+// Corrección 5: Pasar parámetros necesarios
 function enviarDatos(nombre, email, edad) {
   console.log("Registrando a: " + nombre);
   console.log("Email: " + email);
