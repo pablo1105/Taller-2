@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registros</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <!-- Fragmento del Formulario -->
+    <section id="main-container">
+      <form id="registro-form" action="#">
+        <div class="input-group">
+          <span class="label">Nombre Completo:</span>
+          <input type="text" id="usr_nm" name="username" />
+          <span id="nombre-error" class="error-message"></span>
+        </div>
+
+        <div class="input-group">
+          <span class="label">Edad:</span>
+          <input type="number" id="age_val" name="age" />
+          <span id="edad-error" class="error-message"></span>
+        </div>
+
+        <div class="input-group">
+          <span class="label">Email:</span>
+          <input type="email" id="correo_elect" name="email" />
+          <span id="email-error" class="error-message"></span>
+        </div>
+
+        <!-- Botón corregido -->
+        <button type="submit" id="btn-submit">Enviar Registro</button>
+      </form>
+    </section>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
