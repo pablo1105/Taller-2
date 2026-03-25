@@ -1,4 +1,4 @@
-#Evaluación Práctica — Sistema de Registro de Eventos
+Evaluación Práctica — Sistema de Registro de Eventos
 Objetivo
 
 Identificar errores de lógica, sintaxis y estructura en un sistema de registro, aplicando buenas prácticas y principios de Clean Code para mejorar la mantenibilidad y validación del formulario.
