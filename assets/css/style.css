@@ -1,40 +1,91 @@
-/* Corrección de alineación usando Flexbox */
-#main-container {
-  padding: 20px;
-  margin: 0 auto;
-  width: 500px;
-  background: #f9f9f9;
-  border-radius: 8px;
+/* ============================= */
+/* Variables CSS */
+/* ============================= */
+
+:root {
+  --primary-color: #2563eb;
+  --error-color: #dc2626;
+  --success-color: #16a34a;
 }
+
+/* Reset */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* Contenedor */
+
+#main-container {
+  max-width: 500px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Grupo inputs */
 
 .input-group {
-  margin-bottom: 15px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 15px;
 }
 
-.label {
+/* Labels */
+
+label {
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.input-group input {
+/* Inputs */
+
+input {
   padding: 8px;
-  border: 1px solid #ccc;
   border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
-/* Selectores descriptivos y específicos */
-.error-message {
-  color: red;
-  font-weight: bold;
-  font-size: 14px;
-  margin-top: 5px;
+/* Botón */
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
 }
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Error */
+
+.error-message {
+  color: var(--error-color);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* Éxito */
 
 .success-message {
-  color: green;
-  font-weight: bold;
+  color: var(--success-color);
   text-align: center;
   margin-top: 15px;
+  font-weight: bold;
 }
