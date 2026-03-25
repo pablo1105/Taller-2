@@ -1,103 +1,91 @@
-// Corrección de validación
-const form = document.getElementById("registro-form"); // Corrección 1: Usar getElementById
-const boton = document.getElementById("btn-submit");
+// Referencia formulario
+const form = document.getElementById("registro-form");
 
-// Cambiar a evento de submit del formulario para mejor control
-form.addEventListener("submit", function (e) {
-  e.preventDefault(); // Prevenir envío por defecto
+// Evento submit
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
 
-  const nombre = document.getElementById("usr_nm").value;
-  const edad = document.getElementById("age_val").value;
-  const email = document.getElementById("correo_elect").value;
+  const datos = obtenerDatosFormulario();
 
-  let hayErrores = false;
+  limpiarErrores();
 
-  // Corrección 2: Usar comparación en lugar de asignación
-  if (nombre === "" || nombre.length < 2) {
-    mostrarError(
-      "nombre-error",
-      "El nombre es obligatorio y debe tener al menos 2 caracteres",
-    );
-    hayErrores = true;
-  } else {
-    limpiarError("nombre-error");
-  }
+  const esValido = validarFormulario(datos);
 
-  // Corrección 3: Validación de rango de edad
-  if (edad === "") {
-    mostrarError("edad-error", "La edad es obligatoria");
-    hayErrores = true;
-  } else if (isNaN(edad) || Number(edad) < 18) {
-    mostrarError("edad-error", "Debe ser mayor de 18 años");
-    hayErrores = true;
-  } else if (Number(edad) > 120) {
-    // Corrección: Edad máxima razonable
-    mostrarError("edad-error", "La edad no puede ser mayor a 120 años");
-    hayErrores = true;
-  } else {
-    limpiarError("edad-error");
-  }
+  if (!esValido) return;
 
-  // Validación de email
-  if (email === "" || !isValidEmail(email)) {
-    mostrarError("email-error", "Email válido es obligatorio");
-    hayErrores = true;
-  } else {
-    limpiarError("email-error");
-  }
-
-  // Corrección 4: Solo enviar si no hay errores
-  if (!hayErrores) {
-    enviarDatos(nombre, email, edad);
-    mostrarExito();
-    form.reset(); // Limpiar formulario
-  }
+  enviarDatos(datos);
+  mostrarExito();
+  form.reset();
 });
 
-function mostrarError(elementId, mensaje) {
-  const elemento = document.getElementById(elementId);
-  if (elemento) {
-    elemento.textContent = mensaje;
-  }
-}
+// Obtener datos
+const obtenerDatosFormulario = () => {
+  return {
+    nombre: document.getElementById("nombre").value.trim(),
+    edad: document.getElementById("edad").value.trim(),
+    email: document.getElementById("email").value.trim()
+  };
+};
 
-function limpiarError(elementId) {
-  const elemento = document.getElementById(elementId);
-  if (elemento) {
-    elemento.textContent = "";
-  }
-}
+// Validación
+const validarFormulario = (datos) => {
+  let valido = true;
 
-function isValidEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
-
-// Corrección 5: Pasar parámetros necesarios
-function enviarDatos(nombre, email, edad) {
-  console.log("Registrando a: " + nombre);
-  console.log("Email: " + email);
-  console.log("Edad: " + edad);
-}
-
-function mostrarExito() {
-  const successDiv = document.createElement("div");
-  successDiv.className = "success-message";
-  successDiv.textContent = "¡Registro exitoso!";
-  successDiv.id = "mensaje-exito";
-
-  // Remover mensaje anterior si existe
-  const mensajeAnterior = document.getElementById("mensaje-exito");
-  if (mensajeAnterior) {
-    mensajeAnterior.remove();
+  if (datos.nombre.length < 2) {
+    mostrarError("nombre-error", "Nombre mínimo 2 caracteres");
+    valido = false;
   }
 
-  form.appendChild(successDiv);
+  if (datos.edad === "" || isNaN(datos.edad)) {
+    mostrarError("edad-error", "Edad inválida");
+    valido = false;
+  } 
+  else if (datos.edad < 18 || datos.edad > 120) {
+    mostrarError("edad-error", "Edad entre 18 y 120");
+    valido = false;
+  }
 
-  // Remover mensaje después de 3 segundos
+  if (!validarEmail(datos.email)) {
+    mostrarError("email-error", "Email inválido");
+    valido = false;
+  }
+
+  return valido;
+};
+
+// Mostrar error
+const mostrarError = (id, mensaje) => {
+  document.getElementById(id).textContent = mensaje;
+};
+
+// Limpiar errores
+const limpiarErrores = () => {
+  document
+    .querySelectorAll(".error-message")
+    .forEach(el => el.textContent = "");
+};
+
+// Validar email
+const validarEmail = (email) => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+};
+
+// Enviar datos
+const enviarDatos = (datos) => {
+  console.log("Datos enviados:", datos);
+};
+
+// Mensaje éxito
+const mostrarExito = () => {
+  const mensaje = document.createElement("div");
+
+  mensaje.className = "success-message";
+  mensaje.textContent = "Registro exitoso";
+
+  form.appendChild(mensaje);
+
   setTimeout(() => {
-    if (successDiv.parentNode) {
-      successDiv.remove();
-    }
+    mensaje.remove();
   }, 3000);
-}
+};
