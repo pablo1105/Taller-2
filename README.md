@@ -1,101 +1,221 @@
-# Taller 2 - Sistema de Registro de Eventos
+#Evaluación Práctica — Sistema de Registro de Eventos
+Objetivo
 
-## Estado Anterior del Sistema
-El sistema presentaba múltiples problemas críticos que afectaban su funcionalidad y mantenibilidad:
+Identificar errores de lógica, sintaxis y estructura en un sistema de registro, aplicando buenas prácticas y principios de Clean Code para mejorar la mantenibilidad y validación del formulario.
 
-### Problemas en HTML:
-* Botón de envío configurado como type="button" en lugar de type="submit".
-* IDs de elementos poco descriptivos (usr_nm, age_val, correo_elect).
-* Falta de elementos para mostrar mensajes de error al usuario
-Estructura básica incompleta.
+Parte A — Diagnóstico de Errores
 
-### Problemas en CSS:
-* Selectores acoplados y poco específicos (#registro-form div span).
-* Diseño desalineado sin uso de Flexbox o Grid.
-* Nombres de clases y selectores no descriptivos.
+Se identificaron los siguientes errores en el sistema original:
 
-### Problemas en JavaScript:
-* Selector incorrecto: document.getElementsByClassName('registro-form') cuando era un ID.
-* Error de asignación en lugar de comparación: if (nombre = "").
-* Validación lógica incorrecta: comparación estricta edad === 18 en lugar de rango.
-* Problemas de scope: variable nombre no accesible en función enviarDatos().
-* Sin validación de campos requeridos ni formato de email.
-* Falta de prevención de envío cuando hay errores.
-* Valores numéricos absurdos aceptados (ej: 2318612178135168 como edad).
+Error 1 — Selector incorrecto del formulario
 
-## Correcciones Realizadas
-### HTML:
-✅ Cambio de type="button" a type="submit" en el botón.
+Archivo: main.js
+Código original:
 
-✅ Mantenimiento de IDs originales por consistencia con JS existente.
+const form = document.getElementsByClassName('registro-form');
 
-✅ Adición de elementos span para mensajes de error individuales.
+Problema:
+Se intenta seleccionar el formulario usando una clase cuando el HTML utiliza un ID. Esto devuelve una colección vacía y rompe la validación.
 
-✅ Estructura HTML completa con doctype y metadatos.
+Corrección:
 
-### CSS:
-✅ Reemplazo de selectores acoplados por clases específicas.
+const form = document.getElementById('registro-form');
+Error 2 — Uso incorrecto del operador de asignación
 
-✅ Implementación de Flexbox para mejor alineación.
+Archivo: main.js
+Código original:
 
-✅ Nombres de clases más descriptivos.
+if (nombre = "")
 
-✅ Estilos separados para mensajes de error y éxito.
+Problema:
+Se usa el operador de asignación (=) en lugar del operador de comparación. La condición siempre se evalúa como verdadera.
 
-### JavaScript:
-✅ Corrección de selector: getElementById('registro-form').
+Corrección:
 
-✅ Fix de asignación: if (nombre === "") (comparación en lugar de asignación).
+if (nombre === "")
+Error 3 — Validación incorrecta de edad
 
-✅ Validación lógica mejorada: rangos en lugar de valores exactos.
+Archivo: main.js
+Código original:
 
-✅ Solución de problemas de scope pasando parámetros correctamente.
+if (edad === 18)
 
-✅ Implementación de validación completa de campos requeridos.
+Problema:
+La validación solo permite exactamente 18 años en lugar de un rango válido.
 
-✅ Validación de formato de email con expresión regular.
+Corrección:
 
-✅ Sistema de prevención de envío cuando hay errores.
+if (edad >= 18)
+Error 4 — Problema de alcance de variable
 
-✅ Validación de rango realista de edad (18-120 años).
+Archivo: main.js
+Código original:
 
-✅ Feedback visual de errores y mensajes de éxito.
+console.log("Registrando a: " + nombre);
 
-✅ Manejo adecuado de eventos de formulario.
+Problema:
+La variable nombre no existe dentro del scope de la función.
 
-## Estado Actual del Sistema
-### Funcionalidades Implementadas:
+Corrección:
 
-✅ Validación completa de formulario en frontend.
+function enviarDatos(nombre) {
+Error 5 — Botón no envía el formulario
 
-✅ Feedback visual inmediato de errores.
+Archivo: index.html
+Código original:
 
-✅ Prevención de envío con datos inválidos.
+<button type="button">
 
-✅ Mensajes de éxito al registrar correctamente.
+Problema:
+El botón no envía el formulario porque no es tipo submit.
 
-✅ Diseño responsive y bien alineado con Flexbox.
+Corrección:
 
-✅ Código mantenible y siguiendo estándares.
+<button type="submit">
+Parte B — Reestructuración y Clean Code
 
-✅ Nombres semánticos y convenciones claras.
+Se realizaron mejoras estructurales en HTML, CSS y JavaScript siguiendo buenas prácticas.
 
-✅ Validación de rangos realistas (edad entre 18-120 años).
+Mejoras en HTML
+Uso de etiquetas semánticas <label>
+Asociación correcta entre label e input mediante for e id
+Uso de required para validación básica
+Estructura HTML completa
+Eliminación de etiquetas obsoletas
+Agregado de contenedores para mensajes de error dinámicos
 
-### Estructura del Proyecto:
-    Taller-2/
-    ├── index.html
-    └── assets/
-        ├── css/
-        │   └── style.css
-        └── js/
-            └── main.js
+Ejemplo aplicado:
 
-### Mejoras Clave:
-* Experiencia de Usuario: Feedback claro y mensajes descriptivos.
-* Robustez: Validación exhaustiva de datos de entrada.
-* Mantenibilidad: Código organizado con nombres semánticos.
-* Accesibilidad: Estructura HTML semántica correcta.
-* Seguridad: Prevención de datos inválidos o peligrosos.
+<label for="nombre">Nombre Completo:</label>
+<input type="text" id="nombre" required>
+<div id="nombre-error" class="error-message"></div>
+Mejoras en CSS
 
-El sistema ahora cumple con todos los requisitos solicitados y presenta un código limpio, mantenible y funcional.
+Se implementaron buenas prácticas modernas:
+
+Variables CSS
+Flexbox
+Diseño responsive
+Reset básico
+Selectores semánticos
+Estilos separados para errores y éxito
+
+Ejemplo:
+
+:root {
+  --primary-color: #2563eb;
+  --error-color: #dc2626;
+}
+
+Uso de Flexbox:
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+Mejoras en JavaScript (Clean Code)
+
+Se refactorizó el código aplicando:
+
+Funciones de responsabilidad única
+Arrow functions
+Validación separada
+Uso de preventDefault()
+Retorno booleano en validación
+Separación lógica del DOM
+Manejo dinámico de errores
+
+Estructura final:
+
+obtenerDatosFormulario()
+validarFormulario()
+mostrarError()
+limpiarErrores()
+validarEmail()
+enviarDatos()
+mostrarExito()
+
+Ejemplo:
+
+if (!validarFormulario(datos)) return;
+Parte C — Funcionalidad Implementada
+
+Se implementó la opción:
+
+Manejo dinámico del DOM para mostrar errores
+
+Se crean mensajes de error debajo de cada campo sin usar alert().
+
+Ejemplo:
+
+mostrarError("nombre-error", "Nombre mínimo 2 caracteres");
+
+Los errores se limpian dinámicamente:
+
+document
+  .querySelectorAll(".error-message")
+  .forEach(el => el.textContent = "");
+
+También se implementó:
+
+Validación regex para email
+Mensaje de éxito dinámico
+Eliminación automática del mensaje
+Funcionalidades Implementadas
+Validación completa del formulario
+Validación de nombre
+Validación de edad (18–120)
+Validación regex email
+Mensajes de error dinámicos
+Mensaje de éxito dinámico
+Prevención de envío inválido
+Limpieza automática del formulario
+Código modular y mantenible
+Diseño responsive con Flexbox
+Uso de variables CSS
+HTML semántico
+Estructura del Proyecto
+Evaluacion_Practica/
+│
+├── index.html
+│
+└── assets/
+    ├── css/
+    │   └── style.css
+    │
+    └── js/
+        └── main.js
+Mejoras Implementadas
+Experiencia de Usuario
+
+Mensajes claros y validación inmediata
+
+Mantenibilidad
+
+Código modular con funciones separadas
+
+Accesibilidad
+
+HTML semántico con label e inputs asociados
+
+Robustez
+
+Validación completa de todos los campos
+
+Clean Code
+
+Funciones pequeñas y reutilizables
+
+Estado Final del Sistema
+
+El sistema ahora:
+
+No permite envío con errores
+Muestra mensajes dinámicos
+Valida email con regex
+Valida rango de edad
+Usa diseño responsive
+Aplica Clean Code
+Cumple los requisitos de la evaluación
+
+El sistema cumple con todos los requerimientos solicitados en la Evaluación Práctica y presenta un código limpio, mantenible y funcional.
